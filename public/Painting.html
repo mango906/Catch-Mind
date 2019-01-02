@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link href="paint.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+  <div>
+    <canvas id="canvas" width="500" height="500"></canvas>
+  </div>
+  <button class="tool" style="background-color: red;" onclick="setColor(this.style)"></button>
+  <button class="tool" style="background-color: blue;" onclick="setColor(this.style)"></button>
+  <button class="tool" style="background-color: green;" onclick="setColor(this.style)"></button>
+  <button class="tool" onclick="erase()">
+    <img class="eraser" src="icon/eraser.png" />
+  </button>
+  <input id="lineWidth" type="range" min="0" max="20" value="0">
+  <input id="colorPicker" type="color" />
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="paint.js"></script>
+</body>
+</html>
