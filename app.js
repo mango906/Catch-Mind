@@ -17,6 +17,7 @@ io.on('connection', (socket) =>{
 
   socket.on('Draw', (location) =>{
     io.emit('Draw', location);
+    console.log(location);
   });
 
   socket.on('finishDraw', ()=>{
@@ -33,6 +34,9 @@ io.on('connection', (socket) =>{
 
   socket.on('selectWidth', (e)=>{
     io.emit('selectWidth', e);
-  })
+  });
 
+  socket.on('canvasClear', () =>{
+    io.emit('canvasClear');
+  });
 })

@@ -8,12 +8,16 @@ let posX = -1;
 let posY = -1;
 let drawable = false;
 let lineWidth = 1;
+let lineWidthNum;
 
 window.onload = () =>{
   canvas = document.getElementById("canvas");
   ctx = canvas.getContext("2d");
+  ctx.fillStyle = "#fff";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
   colorPicker = document.getElementById("colorPicker"); 
-  widthRange = document.getElementById("lineWidth");
+  widthRange = document.getElementById("selectWidth");
+  lineWidthNum = document.getElementById("lineWidthNum");
 
   canvas.addEventListener("mousedown", (e) =>{
     let location = {
@@ -39,13 +43,14 @@ window.onload = () =>{
     socket.emit('finishDraw');
   });
 
-  colorPicker.addEventListener('change', colorPicked);
+  // colorPicker.addEventListener('change', colorPicked);
 
-  widthRange.addEventListener('change', selectWidth);
+  widthRange.addEventListener('input', selectWidth);
 
 }
 
 socket.on("initDraw", (location)=>{
+  ctx.beginPath();
   console.log("initDraw");
   initDraw(location);
 });
@@ -63,6 +68,7 @@ socket.on("finishDraw", ()=>{
 
 socket.on("setColor", (el) =>{
   ctx.strokeStyle = el.backgroundColor;
+  console.log(s)
 });
 
 socket.on("setEraser", () =>{
@@ -72,18 +78,24 @@ socket.on("setEraser", () =>{
 socket.on("selectWidth", (e) =>{
   lineWidth = e;
   ctx.lineWidth = lineWidth;
-})
+  widthRange.value = lineWidth;
+  lineWidthNum.innerHTML = lineWidth;
+});
 
-
+socket.on('canvasClear', () =>{
+  ctx.fillStyle = "#fff";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.beginPath();
+});
 
 function initDraw(location){
-  ctx.beginPath();
+  
   drawable = true;
   let position  = getPosition(location);
   posX = position.X;
   posY = position.Y;   
   ctx.moveTo(posX, posY);
-  ctx.lineWidth = lineW;
+  ctx.lineWidth = lineWidth;
 } 
 
 
@@ -92,12 +104,15 @@ function Draw(location){
     ctx.lineTo(position.X, position.Y);
     posX = position.X;
     posY = position.Y;
+    console.log(posX, posY);
     ctx.stroke();
 }
 
 function getPosition(location){
-  let x = location.pageX - canvas.offsetLeft;
-  let y = location.pageY - canvas.offsetTop;
+  var rect = canvas.getBoundingClientRect();
+  let x = location.pageX - rect.left
+  let y = location.pageY - rect.top
+  console.log(x, y);
   return {X : x, Y : y};
 }
 
@@ -107,9 +122,9 @@ function finishDraw(e){
   posY = -1;
 }
 
-function colorPicked(e){
-  ctx.strokeStyle = e.target.value; 
-}
+// function colorPicked(e){
+//   ctx.strokeStyle = e.target.value; 
+// }
 
 function setColor(el){
   socket.emit("setColor", el);
@@ -121,5 +136,9 @@ function erase(){
 
 function selectWidth(e){
   socket.emit('selectWidth', e.target.value);
+}
+
+function canvasClear(){
+  socket.emit('canvasClear');
 }
 
