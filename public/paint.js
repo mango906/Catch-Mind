@@ -20,19 +20,23 @@ window.onload = () =>{
   lineWidthNum = document.getElementById("lineWidthNum");
 
   canvas.addEventListener("mousedown", (e) =>{
-    let location = {
+    let pageLocation = {
       pageX : e.pageX,
       pageY : e.pageY
-    }
+    };
+    let location  = getPosition(pageLocation);
     socket.emit("initDraw", location);
   });
 
   canvas.addEventListener("mousemove", (e) =>{
-    let location = {
-      pageX : e.pageX,
-      pageY : e.pageY
+    if(drawable){
+      let pageLocation = {
+        pageX : e.pageX,
+        pageY : e.pageY
+      };
+      let location  = getPosition(pageLocation);
+      socket.emit('Draw', location);
     }
-    socket.emit('Draw', location);
   });
 
   canvas.addEventListener("mouseup", ()=>{
@@ -43,23 +47,17 @@ window.onload = () =>{
     socket.emit('finishDraw');
   });
 
-  // colorPicker.addEventListener('change', colorPicked);
-
   widthRange.addEventListener('input', selectWidth);
 
 }
 
 socket.on("initDraw", (location)=>{
   ctx.beginPath();
-  console.log("initDraw");
   initDraw(location);
 });
 
-socket.on("Draw", (e) =>{
-  if(drawable){
-    console.log("Draw");
-    Draw(e);
-  }
+socket.on("Draw", (location) =>{
+    Draw(location);
 });
 
 socket.on("finishDraw", ()=>{
@@ -68,7 +66,6 @@ socket.on("finishDraw", ()=>{
 
 socket.on("setColor", (el) =>{
   ctx.strokeStyle = el.backgroundColor;
-  console.log(s)
 });
 
 socket.on("setEraser", () =>{
@@ -89,22 +86,14 @@ socket.on('canvasClear', () =>{
 });
 
 function initDraw(location){
-  
   drawable = true;
-  let position  = getPosition(location);
-  posX = position.X;
-  posY = position.Y;   
-  ctx.moveTo(posX, posY);
+  ctx.moveTo(location.X, location.Y);
   ctx.lineWidth = lineWidth;
 } 
 
 
 function Draw(location){
-    let position = getPosition(location);
-    ctx.lineTo(position.X, position.Y);
-    posX = position.X;
-    posY = position.Y;
-    console.log(posX, posY);
+    ctx.lineTo(location.X, location.Y);
     ctx.stroke();
 }
 
@@ -112,7 +101,6 @@ function getPosition(location){
   var rect = canvas.getBoundingClientRect();
   let x = location.pageX - rect.left
   let y = location.pageY - rect.top
-  console.log(x, y);
   return {X : x, Y : y};
 }
 
@@ -121,10 +109,6 @@ function finishDraw(e){
   posX = -1;
   posY = -1;
 }
-
-// function colorPicked(e){
-//   ctx.strokeStyle = e.target.value; 
-// }
 
 function setColor(el){
   socket.emit("setColor", el);

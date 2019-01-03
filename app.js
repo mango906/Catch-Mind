@@ -17,7 +17,6 @@ io.on('connection', (socket) =>{
 
   socket.on('Draw', (location) =>{
     io.emit('Draw', location);
-    console.log(location);
   });
 
   socket.on('finishDraw', ()=>{
