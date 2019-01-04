@@ -11,15 +11,25 @@ http.listen(3000, function(){
 });
 
 io.on('connection', (socket) =>{
-  console.log('연결 됐어요');
 
   socket.on('join', (nickname) =>{
     let client = new Object();
     client.id = socket.id;
     client.name = nickname;
     clients.push(client);
+    console.log(client);
     socket.emit('getId', client);
+    io.emit('users', clients);
   });
+
+  socket.on('disconnect', () =>{
+    clients.forEach((client, i) => {
+      if(client.id === socket.id){
+        clients.splice(i, 1);
+      } 
+    });
+    io.emit('users', clients);
+  })
 
   socket.on('chat', (chatObject) =>{
     let chatData = new Object();

@@ -11,11 +11,11 @@ let lineWidth = 1;
 let lineWidthNum;
 let chat;
 let my_id;
+let users;
 
 window.onload = () =>{
 
   let nickname = prompt('이름을 입력해주세요.');
-  
   socket.emit("join", nickname);
 
   canvas = document.getElementById("canvas");
@@ -26,6 +26,7 @@ window.onload = () =>{
   widthRange = document.getElementById("selectWidth");
   lineWidthNum = document.getElementById("lineWidthNum");
   chat = document.getElementById("chat");
+  users = document.getElementById("users");
 
   canvas.addEventListener("mousedown", (e) =>{
     let pageLocation = {
@@ -59,6 +60,27 @@ window.onload = () =>{
 
 }
 
+socket.on('users', (clients)=>{
+  while (users.hasChildNodes()) {             // user remove
+    users.removeChild(users.lastChild);
+  };
+
+  clients.forEach(client => {                 // user add
+    let parentDiv = document.createElement("li");
+    parentDiv.style.display = "inline-block";
+    let childDiv = document.createElement("div");
+    childDiv.innerHTML = client.name;
+    childDiv.style.textAlign = "center";
+    childDiv.style.color = "#fff";
+    childDiv.style.fontSize = "1.25rem";
+    let img = document.createElement("img");
+    img.width = 150;
+    img.src = './icon/boy.png';
+    parentDiv.appendChild(img);
+    parentDiv.appendChild(childDiv);
+    users.appendChild(parentDiv);
+  });
+});
 
 socket.on("getId", (client) =>{
   my_id = client.id;

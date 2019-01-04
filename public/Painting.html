@@ -5,28 +5,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
+  <link href="https://fonts.googleapis.com/css?family=Krub|Noto+Serif+KR" rel="stylesheet">
   <link href="paint.css" rel="stylesheet" type="text/css">
 </head>
 <body>
+  <ul id="users">
+  </ul>
   <div id="painting">
-    <div>
+    <div style="display:inline-block">
         <canvas id="canvas" width="700" height="700"></canvas>
-      </div>
-      <button class="tool" style="background-color: red;" onclick="setColor(this.style)"></button>
-      <button class="tool" style="background-color: yellow;" onclick="setColor(this.style)"></button>
-      <button class="tool" style="background-color: green;" onclick="setColor(this.style)"></button>
-      <button class="tool" style="background-color: blue;" onclick="setColor(this.style)"></button>
-      <button class="tool" style="background-color: black;" onclick="setColor(this.style)"></button>
-      <button class="tool" onclick="erase()">
-        <img class="imgBtn" src="icon/eraser.png" />
-      </button>
-      <button class="tool" onclick="canvasClear()">
-        <img class="imgBtn" src="icon/delete.png"/>
-      </button>
-      <input id="selectWidth" type="range" min="0" max="20" value="0">
-      <span id="lineWidthNum">0</span>
-      <br> <input id="chat" type="text" placeholder="내용을 입력해주세요..." />
+    </div>
+    <button class="tool" style="background-color: red;" onclick="setColor(this.style)"></button>
+    <button class="tool" style="background-color: yellow;" onclick="setColor(this.style)"></button>
+    <button class="tool" style="background-color: green;" onclick="setColor(this.style)"></button>
+    <button class="tool" style="background-color: blue;" onclick="setColor(this.style)"></button>
+    <button class="tool" style="background-color: black;" onclick="setColor(this.style)"></button>
+    <button class="tool" onclick="erase()">
+      <img class="imgBtn" src="icon/eraser.png" />
+    </button>
+    <button class="tool" onclick="canvasClear()">
+      <img class="imgBtn" src="icon/delete.png"/>
+    </button>
+    <input id="selectWidth" type="range" min="0" max="20" value="0">
+    <span id="lineWidthNum">0</span>
+    <br> 
+    <div id="inputarea">
+      <div id="time"></div>
+      <input id="chat" type="text" placeholder="내용을 입력해주세요..." />
       <input type="button" value="전송" onclick="submit()">
+    </div>
   </div>
   <script src="/socket.io/socket.io.js"></script>
   <script src="paint.js"></script>
