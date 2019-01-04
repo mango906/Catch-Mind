@@ -3,13 +3,47 @@ let app = express();
 let http = require('http').createServer(app);
 let io = require('socket.io')(http);
 
+let clients = [];
+
 app.use(express.static('public'));
 http.listen(3000, function(){
   console.log('server on!');
 });
 
 io.on('connection', (socket) =>{
-  console.log('연결 됬어요');
+  console.log('연결 됐어요');
+
+  socket.on('join', (nickname) =>{
+    let client = new Object();
+    client.id = socket.id;
+    client.name = nickname;
+    clients.push(client);
+    socket.emit('getId', client);
+  });
+
+  socket.on('chat', (chatObject) =>{
+    let chatData = new Object();
+    clients.forEach(client => {
+      if(client.id === chatObject.id){
+        chatData.name = client.name;
+        chatData.value = chatObject.value;
+        return;
+      }
+    });
+    io.emit('chat', chatData)
+  });
+
+  // socket.on('setName', (nickname) =>{
+  //   console.log(socket.id);
+  //   socket.nickname = nickname;
+  //   socket.join('room');
+    
+  //   console.log(io.sockets.adapter.rooms['room']);
+
+  //   // roster.forEach(function(client) {
+  //   //     console.log('Username: ' + client.nickname);
+  //   // });
+  // })
 
   socket.on('initDraw', (location) =>{
     io.emit('initDraw', location);

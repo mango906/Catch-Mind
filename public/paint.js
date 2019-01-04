@@ -9,8 +9,15 @@ let posY = -1;
 let drawable = false;
 let lineWidth = 1;
 let lineWidthNum;
+let chat;
+let my_id;
 
 window.onload = () =>{
+
+  let nickname = prompt('이름을 입력해주세요.');
+  
+  socket.emit("join", nickname);
+
   canvas = document.getElementById("canvas");
   ctx = canvas.getContext("2d");
   ctx.fillStyle = "#fff";
@@ -18,6 +25,7 @@ window.onload = () =>{
   colorPicker = document.getElementById("colorPicker"); 
   widthRange = document.getElementById("selectWidth");
   lineWidthNum = document.getElementById("lineWidthNum");
+  chat = document.getElementById("chat");
 
   canvas.addEventListener("mousedown", (e) =>{
     let pageLocation = {
@@ -50,6 +58,15 @@ window.onload = () =>{
   widthRange.addEventListener('input', selectWidth);
 
 }
+
+
+socket.on("getId", (client) =>{
+  my_id = client.id;
+});
+
+socket.on('chat', (chatData) =>{
+  alert(`${chatData.name} : ${chatData.value}`)
+})
 
 socket.on("initDraw", (location)=>{
   ctx.beginPath();
@@ -126,3 +143,9 @@ function canvasClear(){
   socket.emit('canvasClear');
 }
 
+function submit(){
+  let chatObject = new Object();
+  chatObject.id = my_id;
+  chatObject.value = chat.value
+  socket.emit('chat', chatObject);
+}
