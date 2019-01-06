@@ -73,3 +73,11 @@ body{
   height:50px;
   background: #fff;
 }
+
+#chatting{
+  background: #fff;
+  position: absolute;
+  right:0;
+  width: 100px;
+  height: 100px;
+}

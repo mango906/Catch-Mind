@@ -12,6 +12,7 @@ let lineWidthNum;
 let chat;
 let my_id;
 let users;
+let chatting;
 
 window.onload = () =>{
 
@@ -27,6 +28,7 @@ window.onload = () =>{
   lineWidthNum = document.getElementById("lineWidthNum");
   chat = document.getElementById("chat");
   users = document.getElementById("users");
+  chatting = document.getElementById("chatting");
 
   canvas.addEventListener("mousedown", (e) =>{
     let pageLocation = {
@@ -86,8 +88,15 @@ socket.on("getId", (client) =>{
   my_id = client.id;
 });
 
-socket.on('chat', (chatData) =>{
-  alert(`${chatData.name} : ${chatData.value}`)
+socket.on('chat', (chats) =>{
+  while (chatting.hasChildNodes()) {             // chatting remove
+    chatting.removeChild(chatting.lastChild);
+  };
+  chats.forEach(chat => {
+    let li = document.createElement("li");
+    li.innerHTML = `${chat.name} : ${chat.value}`;
+    chatting.appendChild(li);  
+  });
 })
 
 socket.on("initDraw", (location)=>{

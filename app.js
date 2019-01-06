@@ -4,6 +4,7 @@ let http = require('http').createServer(app);
 let io = require('socket.io')(http);
 
 let clients = [];
+let chats = [];
 
 app.use(express.static('public'));
 http.listen(3000, function(){
@@ -40,7 +41,8 @@ io.on('connection', (socket) =>{
         return;
       }
     });
-    io.emit('chat', chatData)
+    chats.push(chatData);
+    io.emit('chat', chats)
   });
 
   // socket.on('setName', (nickname) =>{
