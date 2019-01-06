@@ -9,32 +9,41 @@
   <link href="paint.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-  <ul id="users">
-  </ul>
-  <ul id="chatting">
-  </ul>
+  
   <div id="painting">
-    <div style="display:inline-block">
-        <canvas id="canvas" width="700" height="700"></canvas>
-    </div>
-    <button class="tool" style="background-color: red;" onclick="setColor(this.style)"></button>
-    <button class="tool" style="background-color: yellow;" onclick="setColor(this.style)"></button>
-    <button class="tool" style="background-color: green;" onclick="setColor(this.style)"></button>
-    <button class="tool" style="background-color: blue;" onclick="setColor(this.style)"></button>
-    <button class="tool" style="background-color: black;" onclick="setColor(this.style)"></button>
-    <button class="tool" onclick="erase()">
-      <img class="imgBtn" src="icon/eraser.png" />
-    </button>
-    <button class="tool" onclick="canvasClear()">
-      <img class="imgBtn" src="icon/delete.png"/>
-    </button>
-    <input id="selectWidth" type="range" min="0" max="20" value="0">
-    <span id="lineWidthNum">0</span>
+    <canvas id="canvas" width="1536" height="730"></canvas>
     <br> 
-    <div id="inputarea">
-      <div id="time"></div>
-      <input id="chat" type="text" placeholder="내용을 입력해주세요..." />
-      <input type="button" value="전송" onclick="submit()">
+    <ul id="users">
+    </ul>
+  </div>
+  <div id="toolarea">
+    <div id="quiz">
+      <ul id="quizul">
+        <li class="quizAnswer">?</li>
+        <li class="quizCount">0/10</li>
+      </ul>
+    </div>
+    <div id="chattools">
+      <ul id="chatting">
+      </ul>
+      <div id="chatform">
+        <input id="chat" type="text"/>
+        <input type="button" class="submitBtn" value="전송" onclick="submit()">
+      </div>
+    </div>
+    <div id="tools">
+      <button class="tool" style="background-color: red;" onclick="setColor(this.style)"></button>
+      <button class="tool" style="background-color: yellow;" onclick="setColor(this.style)"></button>
+      <button class="tool" style="background-color: green;" onclick="setColor(this.style)"></button>
+      <button class="tool" style="background-color: blue;" onclick="setColor(this.style)"></button>
+      <button class="tool" style="background-color: black;" onclick="setColor(this.style)"></button>
+        <input id="selectWidth" class="slider" type="range" min="0" max="20" value="0">
+      <button class="tool" onclick="erase()">
+          <img class="imgBtn" src="icon/eraser.png" />
+        </button>
+        <button class="tool" onclick="canvasClear()">
+          <img class="imgBtn" src="icon/delete.png"/>
+        </button>
     </div>
   </div>
   <script src="/socket.io/socket.io.js"></script>

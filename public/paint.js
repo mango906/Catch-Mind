@@ -13,6 +13,8 @@ let chat;
 let my_id;
 let users;
 let chatting;
+let seconds = 60;
+let time;
 
 window.onload = () =>{
 
@@ -29,6 +31,9 @@ window.onload = () =>{
   chat = document.getElementById("chat");
   users = document.getElementById("users");
   chatting = document.getElementById("chatting");
+  time = document.getElementById("time");
+
+  
 
   canvas.addEventListener("mousedown", (e) =>{
     let pageLocation = {
@@ -60,6 +65,10 @@ window.onload = () =>{
 
   widthRange.addEventListener('input', selectWidth);
 
+  // resizeCanvas();
+
+  // setInterval(setTime, 1000);
+
 }
 
 socket.on('users', (clients)=>{
@@ -70,16 +79,32 @@ socket.on('users', (clients)=>{
   clients.forEach(client => {                 // user add
     let parentDiv = document.createElement("li");
     parentDiv.style.display = "inline-block";
-    let childDiv = document.createElement("div");
-    childDiv.innerHTML = client.name;
-    childDiv.style.textAlign = "center";
-    childDiv.style.color = "#fff";
-    childDiv.style.fontSize = "1.25rem";
+    parentDiv.style.marginLeft = '20px';
+    parentDiv.style.marginTop = '10px';
+    parentDiv.style.border = '2px solid #ff9800';
+    let nameDiv = document.createElement("div");
+    nameDiv.style.width = '350px';
+    nameDiv.style.padding = '10px 0px'
+    nameDiv.style.backgroundColor = "#ff9800";
+    nameDiv.innerHTML = client.name;
+    nameDiv.style.textAlign = "center";
+    nameDiv.style.color = "#fff";
+    nameDiv.style.fontSize = "1.25rem";
     let img = document.createElement("img");
-    img.width = 150;
+    img.style.display = 'inline-block';
+    img.style.width = '130px';
     img.src = './icon/boy.png';
+    let pointDiv = document.createElement("div");
+    pointDiv.style.display = 'inline-block';
+    pointDiv.style.width = '200px';
+    pointDiv.style.fontSize = '1.25rem';
+    pointDiv.style.textAlign = "center";
+    pointDiv.style.color = "#fff";
+    pointDiv.innerHTML = "0점";
+    // parentDiv.appendChild(img);
+    parentDiv.appendChild(nameDiv);
     parentDiv.appendChild(img);
-    parentDiv.appendChild(childDiv);
+    parentDiv.appendChild(pointDiv);
     users.appendChild(parentDiv);
   });
 });
@@ -94,9 +119,19 @@ socket.on('chat', (chats) =>{
   };
   chats.forEach(chat => {
     let li = document.createElement("li");
+    li.style.margin = '7px 20px';
+    li.style.cssFloat = 'left';
+    li.style.clear = 'both';
+    li.style.width = 'auto';
+    li.style.fontSize = '1.25rem';
+    li.style.padding = '10px';
+    li.style.borderRadius = '20px'
+    li.style.color = 'white';
+    li.style.backgroundColor = '#FFC100';
     li.innerHTML = `${chat.name} : ${chat.value}`;
     chatting.appendChild(li);  
   });
+  chatting.scrollTo(0, chatting.scrollHeight);
 })
 
 socket.on("initDraw", (location)=>{
@@ -133,6 +168,12 @@ socket.on('canvasClear', () =>{
   ctx.beginPath();
 });
 
+function resizeCanvas(){
+  console.log(window.innerWidth * 0.6);
+  canvas.width = window.innerWidth * 0.6;
+  canvas.height = window.innerHeight;
+}
+
 function initDraw(location){
   drawable = true;
   ctx.moveTo(location.X, location.Y);
@@ -141,8 +182,9 @@ function initDraw(location){
 
 
 function Draw(location){
-    ctx.lineTo(location.X, location.Y);
-    ctx.stroke();
+  console.log(location);
+  ctx.lineTo(location.X, location.Y);
+  ctx.stroke();
 }
 
 function getPosition(location){
@@ -179,4 +221,14 @@ function submit(){
   chatObject.id = my_id;
   chatObject.value = chat.value
   socket.emit('chat', chatObject);
+  chat.value = '';
 }
+
+// function setTime(){
+//   if(seconds == 0){
+//     alert("시간초과!");
+//     seconds = 60;
+//   }
+//   seconds --;
+//   time.innerHTML = seconds;
+// }

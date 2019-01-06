@@ -18,7 +18,6 @@ io.on('connection', (socket) =>{
     client.id = socket.id;
     client.name = nickname;
     clients.push(client);
-    console.log(client);
     socket.emit('getId', client);
     io.emit('users', clients);
   });
@@ -44,18 +43,6 @@ io.on('connection', (socket) =>{
     chats.push(chatData);
     io.emit('chat', chats)
   });
-
-  // socket.on('setName', (nickname) =>{
-  //   console.log(socket.id);
-  //   socket.nickname = nickname;
-  //   socket.join('room');
-    
-  //   console.log(io.sockets.adapter.rooms['room']);
-
-  //   // roster.forEach(function(client) {
-  //   //     console.log('Username: ' + client.nickname);
-  //   // });
-  // })
 
   socket.on('initDraw', (location) =>{
     io.emit('initDraw', location);

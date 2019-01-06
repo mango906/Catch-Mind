@@ -4,21 +4,23 @@
 }
 
 body{
-  background-color: #ff9800;
+  background-color: #F6412D;
+  margin : 0;
+  padding : 0;
 }
 
 #painting{
-  position: relative;
-  transform: translateX(-50%);
-  left : 50%;
-  width: 700px;
+  width: 80%;
+  display:inline-block;
 }
 
 .tool{
+  display: inline-block;
   border : 1px solid #fff;
-  width: 70px;
-  height : 70px;
+  width: 60px;
+  height : 60px;
   outline: none;
+  cursor: pointer;
 }
 
 .imgBtn{
@@ -48,7 +50,9 @@ body{
 }
 
 #users{
-  position: absolute;
+  margin : 0;
+  padding : 0;
+  display: inline-block;
 }
 
 #chat{
@@ -57,27 +61,162 @@ body{
   color: #fff;
   background-color: #ff9800;
   padding : 10px;
-  font-size: 1.5rem;
-}
-
-#chat::placeholder{
-  color:#fff;
+  margin : 0px 10px;
+  font-size: 1.2rem;
+  display: inline-block;
 }
 
 #canvas{
-  margin:0;
+  margin : 0;
+  padding : 0;
+  width: 100%;
 }
 
 #time{
-  width: 100px;
-  height:50px;
-  background: #fff;
+  width: 200px;
+  height: 50px;
+  color: #fff;
+  text-align: center;
+  font-size: 2.5rem;
+}
+
+#toolarea{
+  display: inline-block;
+  vertical-align: top;
+  width: 19.5%;
+  margin-top: 0;
+}
+
+#chattools{
+  width: 95%;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #ff9800;
+  border-radius: 10px;
+  height: 530px;
+  margin-top: 20px;
 }
 
 #chatting{
-  background: #fff;
+  width: 95%;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #ff9800;
+  border-radius: 20px;
+  top:0;
+  display:inline-block;
+  height: 80%;
+  list-style-type: none;
+  padding-left: 0px;
+  overflow-y: scroll; 
+}
+
+::-webkit-scrollbar { 
+  display: none; 
+}
+
+#inputarea > div{
+  display: inline-block;
+  top : 0;
+}
+
+.submitBtn{
+  background: #F6412D;
+  border : none;
+  color: white;
+  padding: 15px 30px;
+  text-align: center;
+  font-size: 1rem;
+  border-radius: 30px;
+  cursor: pointer;
+}
+
+#tools{
+  margin-top: 20px;
+  padding: 20px;
+  width: 85%;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 20px;
+  background-color: #ff9800;
+}
+
+#quiz{
+  border-radius: 10px;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 95%;
+  height: 160px;
+  margin-top: 20px;
+  background-color: #ff9800;
+}
+
+#quizul{
+  padding : 20px 0px;
+}
+
+#quizul > li{
+  list-style-type: none;
+}
+
+.quizAnswer{
+  position: relative;
+  left : 50%;
+  font-size: 1.5rem;
+  color: #fff;
+  padding: 10px 0px;
+  background-color: #FF5607;
+  transform: translateX(-50%);
+  text-align: center;
+  width: 90%;
+}
+
+.quizCount{
+  position: relative;
+  left : 50%;
+  font-size: 1.5rem;
+  color: #fff;
+  padding: 10px 0px;
+  background-color: #FFC100;
+  transform: translateX(-50%);
+  text-align: center;
+  margin-top: 20px;
+  width: 90%;
+}
+
+.slider {
+  position: relative;
+  top : 50%;
+  transform: translateY(-50%);
+  -webkit-appearance: none;
+  width: 58%;
+  height: 25px;
+  background: #d3d3d3;
+  outline: none;
+}
+
+/* .slider:hover {
+  opacity: 1;
+} */
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 25px;
+  height: 25px;
+  background: #F6412D;
+  cursor: pointer;
+}
+
+
+#chatform{
+  width: 100%;
   position: absolute;
-  right:0;
-  width: 100px;
-  height: 100px;
+  bottom: 0;
+  padding : 20px 0px;
+  background-color: #FFC100;
 }
