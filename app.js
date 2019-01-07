@@ -35,7 +35,14 @@ io.on('connection', (socket) =>{
   socket.on('createRoom', (roomName) =>{
     room_id ++;
     socket.join(roomName);
-    console.log(Object.keys(io.sockets.adapter.rooms));
+    var room_list = {};
+    var rooms = io.sockets.adapter.rooms;
+    Object.keys(rooms).map((key, index) => {
+      var value = rooms[key];
+      if(key != Object.keys(value.sockets)[0])
+        room_list[key] = value;
+    });
+    socket.emit("roomlist", room_list);
   });
 
   socket.on('chat', (chatObject) =>{
