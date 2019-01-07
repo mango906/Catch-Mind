@@ -2,6 +2,7 @@ let express = require('express');
 let app = express();
 let http = require('http').createServer(app);
 let io = require('socket.io')(http);
+let room_id = 0;
 
 let clients = [];
 let chats = [];
@@ -29,7 +30,13 @@ io.on('connection', (socket) =>{
       } 
     });
     io.emit('users', clients);
-  })
+  });
+
+  socket.on('createRoom', (roomName) =>{
+    room_id ++;
+    socket.join(roomName);
+    console.log(Object.keys(io.sockets.adapter.rooms));
+  });
 
   socket.on('chat', (chatObject) =>{
     let chatData = new Object();

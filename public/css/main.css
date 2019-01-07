@@ -1,0 +1,59 @@
+body{
+  margin : 0;
+  padding: 0;
+  background-color: #F6412D;
+}
+
+#roomlist{
+  width: 60%;
+  height: 500px;
+  background-color: #ff9800;
+  position: absolute;
+  margin: 20px;
+}
+
+#roomlist > div{
+  text-indent: 30px;
+  padding: 5px;
+  color: #fff;
+}
+
+#roomlist  button{
+  border: none;
+  background-color: #F6412D;
+  color: #fff;  
+  outline: none;
+  cursor: pointer;
+  border-radius: 10px;
+  float: right;
+}
+
+#roomlist > table{
+  width: 100%;
+}
+
+#roomlist > table  tr  th{
+  color: #fff;
+  padding: 10px;
+  background-color: #FFC100;
+}
+
+#usernav{
+  position: absolute;
+  right: 0;
+  width: 300px;
+  height: 500px;
+  background-color: #ff9800;
+  margin: 20px;
+  border-radius: 20px;
+}
+
+#usernav > div{
+  color: #fff;
+  text-align: center;
+  background-color: #FFC100;
+  width: 100%;
+  padding: 10px 0px;
+  font-size: 1.25rem;
+  border-radius: 20px 20px 0px 0px;
+}
