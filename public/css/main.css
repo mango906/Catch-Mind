@@ -38,6 +38,15 @@ body{
   background-color: #FFC100;
 }
 
+#rooms > tr{
+  cursor: pointer;
+  text-align: center;
+}
+
+#rooms > tr > td{
+  padding : 10px;
+}
+
 #usernav{
   position: absolute;
   right: 0;

@@ -32,17 +32,20 @@ io.on('connection', (socket) =>{
     io.emit('users', clients);
   });
 
-  socket.on('createRoom', (roomName) =>{
-    room_id ++;
+  socket.on('createRoom', (roomName, my_id) =>{
     socket.join(roomName);
+    room_id ++;
     var room_list = {};
     var rooms = io.sockets.adapter.rooms;
     Object.keys(rooms).map((key, index) => {
       var value = rooms[key];
-      if(key != Object.keys(value.sockets)[0])
+      if(key != Object.keys(value.sockets)[0]){
+        value.room_id = room_id;
+        value.room_master = findName(my_id);
         room_list[key] = value;
+      }
     });
-    socket.emit("roomlist", room_list);
+    io.emit("roomlist", room_list);
   });
 
   socket.on('chat', (chatObject) =>{
@@ -86,3 +89,13 @@ io.on('connection', (socket) =>{
     io.emit('canvasClear');
   });
 })
+
+function findName(id){
+  let name;
+  clients.forEach(client => {
+    if(client.id === id){
+      name = client.name;
+    }
+  });
+  return name;
+}
