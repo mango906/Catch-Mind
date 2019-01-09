@@ -3,6 +3,7 @@ let userlist;
 let createRoomBtn;
 let my_id;
 let rooms;
+let roomList;
 
 userlist = document.getElementById("users");
 createRoomBtn = document.getElementById("createRoomBtn");
@@ -17,6 +18,14 @@ createRoomBtn.onclick = () =>{
 };
 
 
+rooms.addEventListener('click', (e) =>{
+  console.log(roomList);
+  let array = Array.prototype.slice.call( rooms.children )
+  let idx = array.indexOf(e.target.parentElement);
+  let room_id = Object.keys(roomList)[idx];
+  socket.emit('joinRoom', room_id);
+})
+
 socket.on("getId", (client) =>{
   my_id = client.id;
   console.log(my_id);
@@ -24,26 +33,47 @@ socket.on("getId", (client) =>{
 
 socket.on("roomlist", (room_list) =>{
 
+  console.log(room_list);
+
+  roomList = room_list;
+
   while (rooms.hasChildNodes()) {             // user remove
     rooms.removeChild(rooms.lastChild);
   };
 
-  for(let key in room_list){
+  room_list.forEach(room => {
     let tr = document.createElement("tr");
     let room_num = document.createElement("td");
     let room_name = document.createElement("td");
     let room_master = document.createElement("td");
     let room_member = document.createElement("td");
-    room_num.innerHTML = room_list[key].room_id;
-    room_name.innerHTML = key;
-    room_master.innerHTML = room_list[key].room_master;
-    room_member.innerHTML = `${room_list[key].length} / 4`;
+    room_num.innerHTML = room.room_id;
+    room_name.innerHTML = room.room_name;
+    room_master.innerHTML = room.room_master;
+    room_member.innerHTML = `${room.detail.length} / 4`;
     tr.append(room_num);
     tr.append(room_name);
     tr.append(room_master);
     tr.append(room_member);
     rooms.append(tr);
-  }
+  });
+
+  // for(let key in room_list){
+  //   let tr = document.createElement("tr");
+  //   let room_num = document.createElement("td");
+  //   let room_name = document.createElement("td");
+  //   let room_master = document.createElement("td");
+  //   let room_member = document.createElement("td");
+  //   room_num.innerHTML = key;
+  //   room_name.innerHTML = room_list[key].room_name;
+  //   room_master.innerHTML = room_list[key].room_master;
+  //   room_member.innerHTML = `${room_list[key].length} / 4`;
+  //   tr.append(room_num);
+  //   tr.append(room_name);
+  //   tr.append(room_master);
+  //   tr.append(room_member);
+  //   rooms.append(tr);
+  // }
 });
 
 socket.on('users', (users)=>{

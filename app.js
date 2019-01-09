@@ -2,19 +2,22 @@ let express = require('express');
 let app = express();
 let http = require('http').createServer(app);
 let io = require('socket.io')(http);
-let room_id = 0;
+let room_id = -1;
 
+let rooms = [];
 let clients = [];
 let chats = [];
 
 app.use(express.static('public'));
-http.listen(3000, function(){
+http.listen(3000, function () {
   console.log('server on!');
 });
 
-io.on('connection', (socket) =>{
+io.on('connection', (socket) => {
 
-  socket.on('join', (nickname) =>{
+  io.emit('roomlist', rooms);
+
+  socket.on('join', (nickname) => {
     let client = new Object();
     client.id = socket.id;
     client.name = nickname;
@@ -23,35 +26,52 @@ io.on('connection', (socket) =>{
     io.emit('users', clients);
   });
 
-  socket.on('disconnect', () =>{
+  socket.on('disconnect', () => {
     clients.forEach((client, i) => {
-      if(client.id === socket.id){
+      if (client.id === socket.id) {
         clients.splice(i, 1);
-      } 
+      }
     });
+
+    io.emit('roomlist', rooms);
     io.emit('users', clients);
   });
 
-  socket.on('createRoom', (roomName, my_id) =>{
-    socket.join(roomName);
-    room_id ++;
-    var room_list = {};
-    var rooms = io.sockets.adapter.rooms;
-    Object.keys(rooms).map((key, index) => {
-      var value = rooms[key];
-      if(key != Object.keys(value.sockets)[0]){
-        value.room_id = room_id;
-        value.room_master = findName(my_id);
+  socket.on('createRoom', (roomName, my_id) => {
+    room_id++;
+    socket.join(room_id);
+    let room_list = {};
+    let socketRooms = io.sockets.adapter.rooms;
+    Object.keys(socketRooms).map((key, index) => {
+      var value = socketRooms[key];
+      if (key != Object.keys(value.sockets)[0]) {
         room_list[key] = value;
       }
     });
-    io.emit("roomlist", room_list);
+
+    let lastKey = Object.keys(room_list)[Object.keys(room_list).length -1];
+
+    let roomMaster = findName(Object.keys(socketRooms[lastKey].sockets)[0]);
+
+    let newRoom = new Object();
+    newRoom.room_id = lastKey;
+    newRoom.room_name = roomName;
+    newRoom.room_master = roomMaster;
+    newRoom.detail = room_list[lastKey];
+    rooms.push(newRoom);
+    io.emit("roomlist", rooms);
   });
 
-  socket.on('chat', (chatObject) =>{
+  socket.on('joinRoom', (room_id) => {
+    let socketRooms = io.sockets.adapter.rooms;
+    socket.join(room_id);
+    io.emit("roomlist", rooms);
+  });
+
+  socket.on('chat', (chatObject) => {
     let chatData = new Object();
     clients.forEach(client => {
-      if(client.id === chatObject.id){
+      if (client.id === chatObject.id) {
         chatData.name = client.name;
         chatData.value = chatObject.value;
         return;
@@ -61,41 +81,53 @@ io.on('connection', (socket) =>{
     io.emit('chat', chats)
   });
 
-  socket.on('initDraw', (location) =>{
+  socket.on('initDraw', (location) => {
     io.emit('initDraw', location);
   });
 
-  socket.on('Draw', (location) =>{
+  socket.on('Draw', (location) => {
     io.emit('Draw', location);
   });
 
-  socket.on('finishDraw', ()=>{
+  socket.on('finishDraw', () => {
     io.emit("finishDraw");
   });
 
-  socket.on('setColor', (el) =>{
+  socket.on('setColor', (el) => {
     io.emit('setColor', el);
   });
 
-  socket.on('setEraser', ()=>{
+  socket.on('setEraser', () => {
     io.emit('setEraser');
   });
 
-  socket.on('selectWidth', (e)=>{
+  socket.on('selectWidth', (e) => {
     io.emit('selectWidth', e);
   });
 
-  socket.on('canvasClear', () =>{
+  socket.on('canvasClear', () => {
     io.emit('canvasClear');
   });
 })
 
-function findName(id){
+function findName(id) {
   let name;
   clients.forEach(client => {
-    if(client.id === id){
+    if (client.id === id) {
       name = client.name;
     }
   });
   return name;
 }
+
+/*
+function refreshRoom(room_id){
+  let socketRooms = io.sockets.adapter.rooms;
+  rooms.forEach(room => {
+    if(room.room_id === room_id){
+      room.detail = socketRooms[room_id];
+    }
+  });
+  console.log(rooms)
+}
+*/
