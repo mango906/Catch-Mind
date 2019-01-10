@@ -27,6 +27,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('disconnect', () => {
+
     clients.forEach((client, i) => {
       if (client.id === socket.id) {
         clients.splice(i, 1);
@@ -34,6 +35,11 @@ io.on('connection', (socket) => {
     });
 
     rooms.forEach((room, i) => {
+
+      let room_master = Object.keys(room.detail.sockets)[0];
+
+      room.room_master = findName(room_master);
+
       if(room.detail.length === 0){
         rooms.splice(i, 1);
       }
@@ -55,6 +61,7 @@ io.on('connection', (socket) => {
       }
     });
 
+
     let lastKey = Object.keys(room_list)[Object.keys(room_list).length -1];
 
     let roomMaster = findName(Object.keys(socketRooms[lastKey].sockets)[0]);
@@ -65,6 +72,8 @@ io.on('connection', (socket) => {
     newRoom.room_master = roomMaster;
     newRoom.detail = room_list[lastKey];
     rooms.push(newRoom);
+
+
     io.emit("roomlist", rooms);
   });
 
