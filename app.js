@@ -33,6 +33,12 @@ io.on('connection', (socket) => {
       }
     });
 
+    rooms.forEach((room, i) => {
+      if(room.detail.length === 0){
+        rooms.splice(i, 1);
+      }
+    });
+
     io.emit('roomlist', rooms);
     io.emit('users', clients);
   });
