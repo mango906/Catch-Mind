@@ -4,10 +4,14 @@ let createRoomBtn;
 let my_id;
 let rooms;
 let roomList;
+let chatlist;
+let chatBtn;
 
 userlist = document.getElementById("users");
 createRoomBtn = document.getElementById("createRoomBtn");
 rooms = document.getElementById("rooms");
+chatlist = document.getElementById("chat-list")
+chatBtn = document.getElementsByName("chatBtn");
 
 let nickname = prompt('이름을 입력해주세요.');
 socket.emit("join", nickname);
@@ -16,6 +20,28 @@ createRoomBtn.onclick = () =>{
   let roomName = prompt('방 이름을 입력해주세요.');
   socket.emit('createRoom', roomName, my_id);
 };
+
+chatBtn[0].addEventListener('click', () =>{
+  let chatContent = document.getElementsByName("chatContent")[0];
+  if(chatContent.value !== ''){
+    let chatObject = {
+      content : chatContent.value,
+      id : my_id
+    };
+    socket.emit("main_chat", chatObject);
+    chatContent.value = "";
+  }
+});
+
+socket.on('main_chat', (chatData) =>{
+  let li = document.createElement("li");
+  li.style.padding = "12px";
+  li.style.color = "#fff";
+  li.style.fontSize = "1.25rem";
+  li.innerHTML = `${chatData.name} : ${chatData.content}`;
+  chatlist.appendChild(li);
+  chatlist.scrollTo(0, chatlist.scrollHeight);
+});
 
 
 rooms.addEventListener('click', (e) =>{
@@ -86,7 +112,6 @@ socket.on('users', (users)=>{
 
   users.forEach(user => {
     let li = document.createElement("li");
-    li.style.listStyleType = 'none';
     li.style.color= 'white';
     li.style.fontSize = '1.15rem';
     li.innerHTML = user.name;

@@ -47,7 +47,17 @@ io.on('connection', (socket) => {
 
     io.emit('roomlist', rooms);
     io.emit('users', clients);
+
   });
+
+  socket.on('main_chat', (chatObject)=>{
+    let chatData = {
+      name : findName(chatObject.id),
+      content : chatObject.content
+    };
+    io.emit('main_chat', chatData);
+  })
+
 
   socket.on('createRoom', (roomName, my_id) => {
     room_id++;
@@ -76,6 +86,8 @@ io.on('connection', (socket) => {
 
     io.emit("roomlist", rooms);
   });
+
+  
 
   socket.on('joinRoom', (room_id) => {
     let socketRooms = io.sockets.adapter.rooms;
@@ -126,7 +138,9 @@ io.on('connection', (socket) => {
 })
 
 function findName(id) {
-  let name;
+  // let name = clients.filter(client =>{
+  //   Object.values(client.id) === id 
+  // });
   clients.forEach(client => {
     if (client.id === id) {
       name = client.name;
