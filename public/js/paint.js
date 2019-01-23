@@ -132,7 +132,7 @@ socket.on('chat', (chats) =>{
     chatting.appendChild(li);  
   });
   chatting.scrollTo(0, chatting.scrollHeight);
-})
+});
 
 socket.on("initDraw", (location)=>{
   ctx.beginPath();
